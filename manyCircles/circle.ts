@@ -1,6 +1,4 @@
-import { doExpression } from "@babel/types";
-
-export class Circle {
+ class Circle {
 
     public canvas: HTMLCanvasElement
     public context: CanvasRenderingContext2D
@@ -11,7 +9,7 @@ export class Circle {
     public dx: number;
     public dy: number;
 
-    public radius: number = (Math.random() * 10) + 2;
+    public radius: number = (Math.random() * 30) + 2;
     public begin: number = 0;
     public end: number = Math.PI * 2;
 
@@ -21,8 +19,8 @@ export class Circle {
         this.canvas = cnvs;
         this.context = ctx;
 
-        this.x = Math.random() * this.canvas.width;
-        this.y = Math.random() * this.canvas.height;
+        this.x = Math.random() * (this.canvas.width - this.radius * 2) + this.radius;
+        this.y = Math.random() * (this.canvas.height - this.radius * 2) + this.radius;
 
         this.dx = Math.random();
         this.dy = Math.random();
@@ -38,6 +36,8 @@ export class Circle {
 
 
     public update = () => {
+
+        console.log("in circle class", mouse.x, mouse.y);
 
         this.x += this.dx;
         this.y += this.dy;

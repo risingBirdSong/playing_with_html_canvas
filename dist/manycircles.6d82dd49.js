@@ -117,25 +117,58 @@ parcelRequire = (function (modules, cache, entry, globalName) {
   }
 
   return newRequire;
-})({"circle.ts":[function(require,module,exports) {
+})({"colors.ts":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports.clrsA = ["#CD88AF", "#AA5585", "#882D61", "#661141", "#440027"];
+exports.clrsB = ["#F8A6AC", "#CF676F", "#A6373F", "#7C151C", "#530006"];
+exports.clrsC = ["#FFD1AA", "#D49A6A", "#AA6C39", "#804515", "#552600"];
+exports.clrsD = ["#7BB992", "#4D9A6A", "#297B48", "#0F5D2C", "#003E17"];
+exports.clrsE = ["#7F81B1", "#545894", "#333676", "#191C59", "#080B3B"];
+},{}],"manycircles.ts":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+console.log("testing");
+
+var colors_1 = require("./colors");
+
+var canvas = document.querySelector("canvas");
+var context = canvas.getContext('2d');
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight; // context.beginPath();
+// context.arc(canvas.width / 2, canvas.height / 2, 30, 0, Math.PI * 2);
+// context.fillStyle = "red";
+// context.fill();
+// let circle = new Circle(canvas, context);
+
+exports.mouse = {
+  x: 0,
+  y: 0
+};
+window.addEventListener("mousemove", function (event) {
+  exports.mouse.x = event.x;
+  exports.mouse.y = event.y;
+});
 
 var Circle =
 /** @class */
 function () {
-  function Circle(cnvs, ctx, color) {
+  function Circle(color) {
     var _this = this;
 
-    this.cnvs = cnvs;
-    this.ctx = ctx;
     this.color = color;
-    this.radius = Math.random() * 10 + 2;
+    this.originalRadius = this.radius;
     this.begin = 0;
     this.end = Math.PI * 2;
+    this.mouseRangeInteract = 100;
+    this.growthRate = 4;
+    this.maxGrowth = Math.random() * 100 + 10;
 
     this.draw = function () {
       _this.context.beginPath();
@@ -161,64 +194,41 @@ function () {
         _this.dy = -_this.dy;
       }
 
+      if (exports.mouse.x - _this.x < _this.mouseRangeInteract && exports.mouse.x - _this.x > -_this.mouseRangeInteract && exports.mouse.y - _this.y < _this.mouseRangeInteract && exports.mouse.y - _this.y > -_this.mouseRangeInteract) {
+        while (_this.radius < _this.maxGrowth) {
+          _this.radius += _this.growthRate;
+        }
+      } else if (_this.radius >= _this.originalRadius) {
+        _this.radius--;
+      }
+
       _this.draw();
     };
 
     this.animate = function () {// this.context.clearRect(0,0, innerWidth, innerHeight);
     };
 
-    this.canvas = cnvs;
-    this.context = ctx;
-    this.x = Math.random() * this.canvas.width;
-    this.y = Math.random() * this.canvas.height;
-    this.dx = Math.random();
-    this.dy = Math.random();
+    this.canvas = canvas;
+    this.context = context;
+    this.radius = Math.random() * 30 + 2;
+    this.originalRadius = this.radius;
+    this.x = Math.random() * (this.canvas.width - this.radius * 2) + this.radius;
+    this.y = Math.random() * (this.canvas.height - this.radius * 2) + this.radius;
+    this.dx = Math.random() * 3;
+    this.dy = Math.random() * 3;
   }
 
   return Circle;
 }();
 
-exports.Circle = Circle;
-},{}],"colors.ts":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.clrsA = ["#CD88AF", "#AA5585", "#882D61", "#661141", "#440027"];
-exports.clrsB = ["#F8A6AC", "#CF676F", "#A6373F", "#7C151C", "#530006"];
-exports.clrsC = ["#FFD1AA", "#D49A6A", "#AA6C39", "#804515", "#552600"];
-exports.clrsD = ["#7BB992", "#4D9A6A", "#297B48", "#0F5D2C", "#003E17"];
-exports.clrsE = ["#7F81B1", "#545894", "#333676", "#191C59", "#080B3B"];
-},{}],"manycircles.ts":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-console.log("testing");
-
-var circle_1 = require("./circle");
-
-var colors_1 = require("./colors");
-
-var canvas = document.querySelector("canvas");
-var context = canvas.getContext('2d');
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight; // context.beginPath();
-// context.arc(canvas.width / 2, canvas.height / 2, 30, 0, Math.PI * 2);
-// context.fillStyle = "red";
-// context.fill();
-// let circle = new Circle(canvas, context);
-
 var allCircles = [];
 var clrs = colors_1.clrsA;
 
-for (var i = 0; i < 1000; i++) {
-  allCircles.push(new circle_1.Circle(canvas, context, clrs[Math.floor(Math.random() * clrs.length)]));
+for (var i = 0; i < 300; i++) {
+  allCircles.push(new Circle(clrs[Math.floor(Math.random() * clrs.length)]));
 }
 
-var testCircle = new circle_1.Circle(canvas, context, colors_1.clrsA[0]);
+var testCircle = new Circle(colors_1.clrsA[0]);
 testCircle.draw();
 
 function animate() {
@@ -232,7 +242,7 @@ function animate() {
 }
 
 animate(); // context.stroke();
-},{"./circle":"circle.ts","./colors":"colors.ts"}],"../../../../../../../AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"./colors":"colors.ts"}],"../../../../../../../AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -260,7 +270,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "62851" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "64813" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
