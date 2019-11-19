@@ -1,6 +1,6 @@
 console.log("testing");
 import {Circle} from "./circle";
-import {clrsA, clrsB} from "./colors";
+import {clrsA, clrsB, clrsC, clrsD,clrsE} from "./colors";
 
 
 let canvas : HTMLCanvasElement = document.querySelector("canvas") as HTMLCanvasElement;
@@ -16,12 +16,26 @@ canvas.height = window.innerHeight;
 
 // let circle = new Circle(canvas, context);
 
-const allCircles : Circle[] = [];
+let allCircles : Circle[] = [];
 
-let clrs = clrsB;
+let clrs = clrsA;
 
-for (let i = 0; i < 100000; i ++) {
+
+
+for (let i = 0; i < 1000; i ++) {
     allCircles.push(new Circle(canvas, context, clrs[Math.floor(Math.random()*clrs.length)]));
 }
+let testCircle = new Circle(canvas, context, clrsA[0]);
+testCircle.draw();
+
+function animate(){
+    requestAnimationFrame(animate);
+    context.clearRect(0,0,window.innerWidth,window.innerHeight);
+   for (let c of allCircles) {
+        c.update();
+   }
+}
+
+animate();
 
 // context.stroke();
